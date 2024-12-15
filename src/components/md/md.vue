@@ -8,27 +8,27 @@
 import { ref, onMounted, defineProps, watch } from "vue";
 import { articleData } from "../../localData/article/index";
 
-const mainData = ref<string>();
+const mainData = ref<string | number>();
 //接受父组件传过来的参数
 const props = defineProps({
-  mainId: {
+  main: {
     type: [Number, String],
   },
 });
 //根据id获取文章
-const getfetch = (id: number | string) => {
-  //根据树传递的文章id，渲染对应文章内容
-  const article = articleData.find((item) => item.id === id);
-  if (article) {
-    mainData.value = article.main;
+const getfetch = (articleMain: number | string) => {
+  if (articleData) {
+    mainData.value = articleMain;
   }
 };
 onMounted(() => {});
 watch(
-  () => props.mainId,
-  (newId) => {
-    if (newId) {
-      getfetch(newId);
+  () => props.main,
+  (newData) => {
+    if (newData != undefined) {
+      getfetch(newData);
+    } else {
+      mainData.value = undefined;
     }
   },
   { immediate: true }

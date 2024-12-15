@@ -19,9 +19,9 @@ export const blogsHomeData: blogsHome = {
     },
     {
       id: "2",
-      title: "cary-biogs",
+      title: "blogs",
       text: "个人博客的前端地址，预计打造成一个动态前端，可配置化渲染页面。",
-      url: "",
+      url: "https://github.com/dengqizhang/cary-blogs",
       projectType: "1",
     },
     {

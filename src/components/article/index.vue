@@ -16,48 +16,58 @@
           :highlight-current="true"
           :default-expand-all="true"
       /></el-aside>
-      <el-main><md :mainId="mainId" /></el-main>
+      <el-main><md :main="main" /></el-main>
     </el-container>
   </div>
 </template>
 <script lang="ts" setup>
 import { ref, onMounted, watch } from "vue";
-import { LocationQueryValue, useRoute } from "vue-router";
+import { useRoute } from "vue-router";
 import { articleData } from "../../localData/article/index";
 import { articleTree } from "../../localData/article/types";
 import md from "./../md/md.vue";
 const route = useRoute();
 const data = ref<any>([]);
-const paramId = ref<string | LocationQueryValue[]>();
-const mainId = ref<number | string>();
+const main = ref<number | string>();
 
 /**
  * 模拟请求网络数据
  */
-const getdata = () => {
-  //转换格式
-  data.value = articleData
-    .map((item) => ({
-      label: item.articleName,
-      ...item,
-    }))
-    .filter((item) => item.navId == paramId.value); //筛选符合导航项的文章
-  //在页面初始请求数据时，传递一次默认项给文章
-  mainId.value = data.value[0].id;
+const getdata = (navId: string | number) => {
+  data.value = [];
+  articleData.forEach((item) => {
+    if (item.navId == navId) {
+      data.value.push(item);
+    }
+  });
+  console.log(data.value);
+  if (data.value.length == 0) {
+    //无导航项情况下
+    main.value = undefined;
+  } else {
+    //默认值赋值
+    //无子节点
+    if (data.value[0].children.length == 0) {
+      main.value = data.value[0].articelMain;
+    } else {
+      //有子节点
+      main.value = data.value[0].children[0].articelMain;
+    }
+  }
 };
 /**
  * 树节点点击事件
  */
 const handleNodeClick = (val: articleTree) => {
-  mainId.value = val.id;
+  console.log(val);
+
+  main.value = val.articelMain;
 };
 onMounted(() => {});
 watch(
   () => route.query.id,
-  (newValue) => {
-    //接受路由传参
-    paramId.value = newValue || "";
-    getdata();
+  (newValue: any) => {
+    getdata(newValue);
   },
   { immediate: true }
 );
