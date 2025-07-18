@@ -1,5 +1,6 @@
 import { articleTree } from "./types";
 import { javaBasics } from "./data/javaBasics";
+import { nginx } from "./data/nginx";
 import { SpringMvcandSpringBoot } from "./data/SpringMvcAndSpringBoot";
 /**
  * 文章列表数据源
@@ -45,5 +46,13 @@ export const articleData: Array<articleTree> = [
     children: [],
     pid: "",
     navId: 4,
+  },
+    {
+    id: 6,
+    articelMain: nginx,
+    label: "nginx使用",
+    children: [],
+    pid: "",
+    navId: 3,
   },
 ];
